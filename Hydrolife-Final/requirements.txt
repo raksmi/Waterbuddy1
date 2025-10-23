@@ -27,5 +27,3 @@ streamlit==1.50.0
 streamlit_push_notifications==0.1
 schedule==1.2.0
 kivymd @ https://github.com/kivymd/KivyMD/archive/master.zip
-
-
