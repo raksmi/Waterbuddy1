@@ -13,9 +13,6 @@ pydantic==2.12.0
 pydantic_core==2.41.1
 pydeck==0.9.1
 pydub==0.25.1
-pygame==2.6.1
-Pygments==2.19.2
-PyMuPDF==1.26.3
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
 python-docx==1.2.0
@@ -27,3 +24,4 @@ streamlit==1.50.0
 streamlit_push_notifications==0.1
 schedule==1.2.0
 kivymd @ https://github.com/kivymd/KivyMD/archive/master.zip
+
