@@ -1,9 +1,10 @@
 """
 Settings page
 """
-
 import streamlit as st
-from database import update_user_profile, update_settings
+from database import update_user_profile, update_settings, reset_today_intake, update_water_data
+from datetime import datetime
+
 
 def show_settings():
     """Settings page"""
@@ -133,3 +134,14 @@ def show_settings():
             <p>Your personal hydration companion 💧</p>
         </div>
         """, unsafe_allow_html=True)
+
+        if st.button("Reset Today's Water Intake", use_container_width=True, type="secondary"):
+            reset_today_intake(st.session_state.user_id)
+            st.session_state.water_data['today_intake'] = 0
+            today_name = datetime.now().strftime('%a')  # 'Mon', 'Tue', etc.
+            for day in st.session_state.water_data['weekly_data']:
+                if day['day'] == today_name:
+                    day['water'] = 0
+            update_water_data(st.session_state.user_id, st.session_state.water_data)
+            st.success("Today's water intake has been cleared! 💧")
+            st.rerun()
