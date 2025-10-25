@@ -249,5 +249,18 @@ def get_all_usernames():
     
     conn.close()
     return usernames
+def reset_today_intake(user_id):
+    """Reset only today's water intake for a given user"""
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE water_data
+        SET today_intake = 0
+        WHERE user_id = ?
+    ''', (user_id,))
+
+    conn.commit()
+    conn.close()
 
 init_database()
+
