@@ -9,14 +9,14 @@ def show_login():
     """Show login/signup page"""
     st.markdown("""
     <div style="text-align: center; padding: 40px 0;">
-        <div style="font-size: 60px; margin-bottom: 4px;">💧</div>
-        <h1 style="color: white; font-family: Arial, sans-serif; margin-top: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        <div style="font-size: 80px; margin-bottom: 4px;">💧</div>
+        <h1 style="color: white; font-family: Arial, sans-serif; margin-top: 0; margin-bottom: 8px;">
             Welcome to HydroLife
         </h1>
         <p style="color: black; font-size: 18px;">Your personal hydration companion</p>
     </div>
     """, unsafe_allow_html=True)
+
 
     
     st.markdown("<br>", unsafe_allow_html=True)
