@@ -8,7 +8,7 @@ from database import user_exists, verify_user, get_all_usernames
 def show_login():
     """Show login/signup page"""
     st.markdown("""
-    <div style="text-align: center; padding: 40px 0;">
+    <div style="text-align: center; padding: 25px 0;">
         <div style="font-size: 80px; margin-bottom: 4px;">💧</div>
         <h1 style="color: white; font-family: Arial, sans-serif; margin-top: 0; margin-bottom: 8px;">
             Welcome to HydroLife
