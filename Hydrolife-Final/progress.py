@@ -259,7 +259,8 @@ def show_progress():
             yaxis=dict(showgrid=True, gridcolor='rgba(0,0,0,0.05)'),
             font=dict(family='Inter, sans-serif')
         )
-    '''
+
         
         st.plotly_chart(fig2, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
+'''
