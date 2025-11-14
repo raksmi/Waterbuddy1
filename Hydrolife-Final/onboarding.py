@@ -79,7 +79,7 @@ def show_age_step():
             index=0
         )
 
-        st.info("💡 Based on your age group, we'll suggest a personalized daily water goal")
+        st.info("💡 Based on your age group, we'll suggest a personalized daily water goal.(You can change your water goal anytime in setting)")
 
         st.markdown("<br>", unsafe_allow_html=True)
 
@@ -127,7 +127,7 @@ def show_health_step():
                     selected = ['none']
                     break
                 selected.append(key)
-        st.info("💡 We'll adjust your daily water goal based on your selections")
+        st.info("💡 We'll adjust your daily water goal based on your selections (You can change your water goal anytime in setting)")
         st.markdown("<br>", unsafe_allow_html=True)
 
         col_back, col_next = st.columns(2)
@@ -171,7 +171,7 @@ def show_reminder_step():
             format_func=lambda x: reminder_options[x],
             index=2  
         )
-        st.info("💡 You can change this anytime in Settings")
+        st.info("💡 You can change this anytime in Settings. IMP: Don't forget to update the same interval in the setting page")
         st.markdown("<br>", unsafe_allow_html=True)
 
         col_back, col_next = st.columns(2)
