@@ -127,7 +127,8 @@ def show_progress():
         plt.close(fig2)
         
         st.markdown('</div>', unsafe_allow_html=True)
-                st.markdown('<div style="background: white; padding: 4px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">', unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<div style="background: white; padding: 4px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">', unsafe_allow_html=True)
         st.markdown('<h3 style="color: white; margin-bottom: 24px;">Daily Intake vs Goal</h3>', unsafe_allow_html=True)
 
         day_options = [d['day'] for d in weekly_data]
