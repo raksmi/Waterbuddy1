@@ -6,6 +6,24 @@ import streamlit as st
 from datetime import datetime
 from database import update_water_data
 
+def show_tip():
+    tips = [
+        "Drinking water can boost your metabolism by up to 30%.",
+        "A glass of water before meals can help with digestion.",
+        "Staying hydrated improves concentration and mood.",
+        "Dehydration can cause headaches—drink up regularly!",
+        "Aim to drink at least 8 cups (about 2 liters) of water a day.",
+        "Carry a reusable water bottle to make tracking your intake easy."
+    ]
+    import random
+    tip = random.choice(tips)
+    st.markdown(f"""
+        <div style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 6px 18px rgba(102,126,234,0.12); text-align: center;">
+            <h3 style="color: #667eea;">💡 Daily Hydration Tip</h3>
+            <p style="color: #222; font-size: 16px; font-weight: 500;">{tip}</p>
+        </div>
+    """, unsafe_allow_html=True)
+    
 def show_water_log():
     """Water logging page with unit converter for cups ↔ ml and sidebar tips."""
 
