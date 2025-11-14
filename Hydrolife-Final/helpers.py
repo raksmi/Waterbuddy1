@@ -37,15 +37,15 @@ def calculate_daily_goal(age, health_conditions):
 def get_avatar(progress):
     """Get avatar emoji based on progress percentage"""
     if progress >= 100:
-        return "🫡"
+        return "🌕"
     elif progress >= 75:
-        return "😄"
+        return "🌔"
     elif progress >= 50:
-        return "🫠"
+        return "🌓"
     elif progress >= 25:
-        return "😗"
+        return "🌒"
     else:
-        return "😑"
+        return "🌑"
 
 def get_level(intake):
     """Get level based on water intake"""
