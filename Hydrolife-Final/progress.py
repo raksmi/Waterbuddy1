@@ -127,8 +127,57 @@ def show_progress():
         plt.close(fig2)
         
         st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('<div style="background: white; padding: 4px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: white; margin-bottom: 24px;">Daily Intake vs Goal</h3>', unsafe_allow_html=True)
 
+        day_options = [d['day'] for d in weekly_data]
+        selected_day = st.selectbox("Select a day:", day_options, index=len(day_options)-1, key="day_select_pie")
 
+        day_data = next(d for d in weekly_data if d['day'] == selected_day)
+        today_water = day_data['water']
+        daily_goal = st.session_state.user_data['daily_goal']
+
+        remaining = max(daily_goal - today_water, 0)
+
+        labels = ['Consumed', 'Remaining']
+        sizes = [today_water, remaining]
+
+       
+        if today_water >= daily_goal:
+            colors = ['#10b981', '#d1fae5'] 
+        else:
+            colors = ['#667eea', '#e0e7ff']  
+
+        
+        fig_pie, ax_pie = plt.subplots(figsize=(3, 3))
+        fig_pie.patch.set_facecolor('white')
+        wedges, texts, autotexts = ax_pie.pie(
+            sizes,
+            labels=labels,
+            colors=colors,
+            autopct='%1.1f%%',
+            startangle=90,
+            counterclock=False,
+            textprops={'color': '#333333', 'fontsize': 10, 'weight': 'bold'},
+            wedgeprops={'edgecolor': 'white', 'linewidth': 2}
+        )
+
+        
+        ax_pie.axis('equal')
+
+        
+        st.pyplot(fig_pie, use_container_width=True)
+        plt.close(fig_pie)
+
+        
+        st.markdown(f"""
+        <p style="text-align:center; color:#555; font-size:14px;">
+        <b>{selected_day}'s Intake:</b> {today_water} ml / {daily_goal} ml
+        </p>
+        """, unsafe_allow_html=True)
+
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
 
 
 
