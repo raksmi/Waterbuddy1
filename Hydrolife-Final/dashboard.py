@@ -46,7 +46,8 @@ def show_dashboard():
             <div style="font-size: 80px; margin-bottom: 24px;" class="pulse-animation">{avatar}</div>
             <div style="margin: 24px 0;">
                 <div style="font-size: 48px; color: #667eea; font-weight: 700;">{today_intake}ml</div>
-                <p style="color: #666;">of {daily_goal}ml goal</p>
+                <p style="color: #666;">of {daily_goal}ml goal
+                You're revoling! Just like the moon🌙</p>
             </div>
             <div style="background: #e0e0e0; border-radius: 50px; height: 12px; overflow: hidden; margin: 16px 0;">
                 <div style="background: linear-gradient(90deg, #667eea 0%, #00d4ff 100%); height: 100%; width: {min(progress, 100)}%; border-radius: 50px; transition: width 0.5s ease;"></div>
