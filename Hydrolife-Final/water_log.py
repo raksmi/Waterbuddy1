@@ -86,7 +86,7 @@ def show_water_log():
                 border-radius: 12px; padding: 16px; text-align: center; 
                 border: 2px solid rgba(102, 126, 234, 0.3);">
         <p style="color: #FFFFFF; font-size: 16px; font-weight: 600; margin: 0;">
-            💧 {remaining_percent:.1f}% remaining to reach your goal!
+            💧 {progress_percent:.1f}% remaining to reach your goal!
         </p>
     </div>
             """, unsafe_allow_html=True)
