@@ -65,13 +65,22 @@ def show_age_step():
         st.markdown("""
         <div style="background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); text-align: center;">
             <div style="font-size: 60px; margin-bottom: 16px;">📅</div>
-            <h3 style="color:black;">How old are you?</h3>
+            <h3 style="color:black;">Select your age range</h3>
             <p style="color: #666; margin-bottom: 24px;">We'll use this to calculate your ideal water goal</p>
         </div>
         """, unsafe_allow_html=True)
+
         st.markdown("<br>", unsafe_allow_html=True)
-        age = st.number_input("Age", min_value=1, max_value=150, value=st.session_state.onboarding_data.get('age', 25), label_visibility="collapsed")
-        st.info("💡 Based on your age, we'll suggest a personalized daily water goal")
+
+        # Dropdown age ranges
+        age_range = st.selectbox(
+            "",
+            ["Under 18", "18–29", "30–49", "50–64", "65+"],
+            index=0
+        )
+
+        st.info("💡 Based on your age group, we'll suggest a personalized daily water goal")
+
         st.markdown("<br>", unsafe_allow_html=True)
 
         col_back, col_next = st.columns(2)
@@ -79,9 +88,10 @@ def show_age_step():
             if st.button("← Back", use_container_width=True):
                 st.session_state.onboarding_step = 1
                 st.rerun()
+
         with col_next:
             if st.button("Continue →", use_container_width=True, type="primary"):
-                st.session_state.onboarding_data['age'] = age
+                st.session_state.onboarding_data['age_range'] = age_range
                 st.session_state.onboarding_step = 3
                 st.rerun()
 
