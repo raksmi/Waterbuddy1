@@ -3,11 +3,11 @@ Onboarding flow for new users
 """
 
 import streamlit as st
-from database import create_user
-from helpers import calculate_daily_goal
-from reminder_page import start_reminder 
+from database import new_user
+from helpers import calculate_goal
+from reminder_page import reminder_start 
 
-def show_onboarding():
+def onboarding():
     """Complete onboarding flow for new users"""
 
     if 'onboarding_step' not in st.session_state:
@@ -18,22 +18,22 @@ def show_onboarding():
             'name': '',
             'age': 25,
             'health_conditions': [],
-            'reminder_interval': 60
+            'reminder_interval_user': 60
         }
 
     step = st.session_state.onboarding_step
 
     if step == 1:
-        show_name_step()
+        name_step()
     elif step == 2:
-        show_age_step()
+        age_step()
     elif step == 3:
-        show_health_step()
+        health_step()
     elif step == 4:
-        show_reminder_step()
+        reminder_step()
 
 
-def show_name_step():
+def name_step():
     """Step 1: Name"""
     st.markdown('<div style="text-align: right; color: rgba(255,255,255,0.7); margin-bottom: 16px;">Step 1 of 4</div>', unsafe_allow_html=True)
     st.markdown('<h1 style="text-align: center; color: white;">What\'s your name?</h1>', unsafe_allow_html=True)
@@ -56,7 +56,7 @@ def show_name_step():
             st.rerun()
 
 
-def show_age_step():
+def age_step():
     """Step 2: Age"""
     st.markdown('<div style="text-align: right; color: rgba(255,255,255,0.7); margin-bottom: 16px;">Step 2 of 4</div>', unsafe_allow_html=True)
     st.markdown('<h1 style="text-align: center; color: white;">How old are you?</h1>', unsafe_allow_html=True)
@@ -73,7 +73,7 @@ def show_age_step():
         st.markdown("<br>", unsafe_allow_html=True)
 
         # Dropdown age ranges
-        age_range = st.selectbox(
+        age_dropdown = st.selectbox(
             "",
             ["Under 18", "18–29", "30–49", "50–64", "65+"],
             index=0
@@ -91,12 +91,12 @@ def show_age_step():
 
         with col_next:
             if st.button("Continue →", use_container_width=True, type="primary"):
-                st.session_state.onboarding_data['age_range'] = age_range
+                st.session_state.onboarding_data['age_dropdown'] = age_dropdown
                 st.session_state.onboarding_step = 3
                 st.rerun()
 
 
-def show_health_step():
+def health_step():
     """Step 3: Health conditions"""
     st.markdown('<div style="text-align: right; color: rgba(255,255,255,0.7); margin-bottom: 16px;">Step 3 of 4</div>', unsafe_allow_html=True)
     st.markdown('<h1 style="text-align: center; color: white;">Health Considerations</h1>', unsafe_allow_html=True)
@@ -142,7 +142,7 @@ def show_health_step():
                 st.rerun()
 
 
-def show_reminder_step():
+def reminder_step():
     """Step 4: Reminders"""
     st.markdown('<div style="text-align: right; color: rgba(255,255,255,0.7); margin-bottom: 16px;">Final Step</div>', unsafe_allow_html=True)
     st.markdown('<h1 style="text-align: center; color: white;">Set Your Reminders</h1>', unsafe_allow_html=True)
@@ -157,7 +157,7 @@ def show_reminder_step():
         """, unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
 
-        reminder_options = {
+        reminder_intervals = {
             0: '🔕 No Reminders',
             30: '⏰ Every 30 minutes',
             60: '⏰ Every 1 hour',
@@ -165,10 +165,10 @@ def show_reminder_step():
             120:'⏰ Every 2 hours',
             180:'⏰ Every 3 hours'
         }
-        selected_interval = st.radio(
+        selected_reminder_interval = st.radio(
             "Select reminder frequency:",
-            options=list(reminder_options.keys()),
-            format_func=lambda x: reminder_options[x],
+            options=list(reminder_intervals.keys()),
+            format_func=lambda x: reminder_intervals[x],
             index=2  
         )
         st.info("💡 You can change this anytime in Settings. IMP: Don't forget to update the same interval in the setting page")
@@ -187,23 +187,23 @@ def show_reminder_step():
                 name = st.session_state.onboarding_data['name']
                 age = st.session_state.onboarding_data['age']
                 health_conditions = st.session_state.onboarding_data['health_conditions']
-                daily_goal = calculate_daily_goal(str(age), health_conditions)
-                reminder_interval = selected_interval
-                st.session_state.onboarding_data['reminder_interval'] = reminder_interval
+                water_goal = calculate_goal(str(age), health_conditions)
+                reminder_interval_user = selected_reminder_interval
+                st.session_state.onboarding_data['reminder_interval_user'] = reminder_interval_user
 
-                success, result = create_user(username, password, name, age, health_conditions, daily_goal)
+                success, result = new_user(username, password, name, age, health_conditions, water_goal)
 
                 if success:
-                    user_id = result
+                    id_user = result
                     st.session_state.logged_in = True
-                    st.session_state.user_id = user_id
+                    st.session_state.id_user = id_user
                     st.session_state.username = username
-                    st.session_state.show_onboarding = False
+                    st.session_state.onboarding = False
                     st.session_state.current_page = 'dashboard'
 
                     
-                    if reminder_interval > 0:
-                        start_reminder(reminder_interval)
+                    if reminder_interval_user > 0:
+                        reminder_start(reminder_interval_user)
 
                     
                     del st.session_state.onboarding_step
@@ -215,5 +215,4 @@ def show_reminder_step():
                     st.rerun()
                 else:
                     st.error(f"Error creating account: {result}")
-
 
