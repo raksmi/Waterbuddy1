@@ -36,18 +36,17 @@ def database():
     
     
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS water_data (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            id_user INTEGER,
-            water_intake INTEGER DEFAULT 0,
-            streak INTEGER DEFAULT 0,
-            whole_sips INTEGER DEFAULT 0,
-            weekly_hist TEXT,
-            yesterday TEXT,
-            data TEXT,
-            FOREIGN KEY (id_user) REFERENCES users (id)
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        password TEXT,
+        name TEXT,
+        age INTEGER,
+        health_conditions TEXT,
+        water_goal INTEGER
         )
-    ''')
+        ''')
+
     
     
     cursor.execute('''
