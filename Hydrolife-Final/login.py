@@ -3,9 +3,9 @@ Login/Signup page for HydroLife
 """
 
 import streamlit as st
-from database import user_exists, verify_user, get_all_usernames
+from database import user_exists, verify_user, get_all_user_name
 
-def show_login():
+def login():
     """Show login/signup page"""
     st.markdown("""
     <div style="text-align: center; padding: 0px 0;">
@@ -24,9 +24,9 @@ def show_login():
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
-        usernames = get_all_usernames()
+        user_name = get_all_user_name()
         
-        if usernames:
+        if user_name:
             st.markdown("""
             <div style="background: #001F3F; padding: 32px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); color: white;">
             <h3 style="text-align: center; margin-bottom: 24px;">Are you a returning user?</h3>
@@ -35,7 +35,7 @@ def show_login():
             
             st.markdown("<br>", unsafe_allow_html=True)
             
-            user_type = st.radio(
+            type_user = st.radio(
                 "Select an option:",
                 ["Existing User", "New User"],
                 horizontal=True,
@@ -44,10 +44,10 @@ def show_login():
             
             st.markdown("<br>", unsafe_allow_html=True)
             
-            if user_type == "Existing User":
-                show_existing_user_login(usernames)
+            if type_user == "Existing User":
+                existing_user_login(user_name)
             else:
-                show_new_user_signup()
+                new_user_signup()
         else:
             st.markdown("""
             <div style="background: white; padding: 32px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
@@ -57,9 +57,9 @@ def show_login():
             """, unsafe_allow_html=True)
             
             st.markdown("<br>", unsafe_allow_html=True)
-            show_new_user_signup()
+            new_user_signup()
 
-def show_existing_user_login(usernames):
+def existing_user_login(user_name):
     """Show login form for existing users"""
     st.markdown("""
  <div style="background: white; padding: 32px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
@@ -75,7 +75,7 @@ def show_existing_user_login(usernames):
     
     username = st.selectbox(
         "Select your username:",
-        options=usernames,
+        options=user_name,
         index=0
     )
     
@@ -98,10 +98,10 @@ def show_existing_user_login(usernames):
             if not password:
                 st.error("Please enter your password")
             else:
-                user_id = verify_user(username, password)
-                if user_id:
+                id_user = verify_user(username, password)
+                if id_user:
                     st.session_state.logged_in = True
-                    st.session_state.user_id = user_id
+                    st.session_state.id_user = id_user
                     st.session_state.username = username
                     st.session_state.current_page = 'dashboard'
                     st.success(f"Welcome back, {username}! 💧")
@@ -109,7 +109,7 @@ def show_existing_user_login(usernames):
                 else:
                     st.error("Invalid password. Please try again.")
 
-def show_new_user_signup():
+def new_user_signup():
     """Show signup form for new users"""
     st.markdown("""
     <div style="background: white; padding: 32px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
@@ -162,6 +162,6 @@ def show_new_user_signup():
         
             st.session_state.signup_username = username
             st.session_state.signup_password = password
-            st.session_state.show_onboarding = True
+            st.session_state.onboarding = True
             st.success("Great! Let's set up your profile...")
             st.rerun()
