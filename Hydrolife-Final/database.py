@@ -15,7 +15,7 @@ def hash_password(password):
     """Hash password using SHA-256"""
     return hashlib.sha256(password.encode()).hexdigest()
 
-def init_database():
+def database():
     """Initialize the database with required tables"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
@@ -29,7 +29,7 @@ def init_database():
             name TEXT,
             age INTEGER,
             health_conditions TEXT,
-            daily_goal INTEGER,
+            water_goal INTEGER,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -38,14 +38,14 @@ def init_database():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS water_data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            today_intake INTEGER DEFAULT 0,
+            id_user INTEGER,
+            water_intake INTEGER DEFAULT 0,
             streak INTEGER DEFAULT 0,
-            total_sips INTEGER DEFAULT 0,
-            weekly_data TEXT,
-            last_date TEXT,
-            history TEXT,
-            FOREIGN KEY (user_id) REFERENCES users (id)
+            whole_sips INTEGER DEFAULT 0,
+            weekly_hist TEXT,
+            yesterday TEXT,
+            data TEXT,
+            FOREIGN KEY (id_user) REFERENCES users (id)
         )
     ''')
     
@@ -53,17 +53,17 @@ def init_database():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS settings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            notifications INTEGER DEFAULT 0,
-            reminder_interval INTEGER DEFAULT 60,
-            FOREIGN KEY (user_id) REFERENCES users (id)
+            id_user INTEGER,
+            notification INTEGER DEFAULT 0,
+            reminder_interval_user INTEGER DEFAULT 60,
+            FOREIGN KEY (id_user) REFERENCES users (id)
         )
     ''')
     
     conn.commit()
     conn.close()
 
-def create_user(username, password, name, age, health_conditions, daily_goal):
+def new_user(username, password, name, age, health_conditions, water_goal):
     """Create a new user account"""
     try:
         conn = sqlite3.connect(DB_FILE)
@@ -74,14 +74,14 @@ def create_user(username, password, name, age, health_conditions, daily_goal):
         
         
         cursor.execute('''
-            INSERT INTO users (username, password, name, age, health_conditions, daily_goal)
+            INSERT INTO users (username, password, name, age, health_conditions, water_goal)
             VALUES (?, ?, ?, ?, ?, ?)
-        ''', (username, hashed_pwd, name, age, health_json, daily_goal))
+        ''', (username, hashed_pwd, name, age, health_json, water_goal))
         
-        user_id = cursor.lastrowid
+        id_user = cursor.lastrowid
         
         
-        weekly_data = json.dumps([
+        weekly_hist = json.dumps([
             {'day': 'Mon', 'water': 0},
             {'day': 'Tue', 'water': 0},
             {'day': 'Wed', 'water': 0},
@@ -92,19 +92,19 @@ def create_user(username, password, name, age, health_conditions, daily_goal):
         ])
         
         cursor.execute('''
-            INSERT INTO water_data (user_id, weekly_data, last_date, history)
+            INSERT INTO water_data (id_user, weekly_hist, yesterday, data)
             VALUES (?, ?, ?, ?)
-        ''', (user_id, weekly_data, str(date.today()), '{}'))
+        ''', (id_user, weekly_hist, str(date.today()), '{}'))
         
         
         cursor.execute('''
-            INSERT INTO settings (user_id)
+            INSERT INTO settings (id_user)
             VALUES (?)
-        ''', (user_id,))
+        ''', (id_user,))
         
         conn.commit()
         conn.close()
-        return True, user_id
+        return True, id_user
     except sqlite3.IntegrityError:
         return False, "Username already exists"
     except Exception as e:
@@ -137,130 +137,131 @@ def user_exists(username):
     
     return result is not None
 
-def get_user_data(user_id):
+def get_userdata(id_user):
     """Get all user data"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
     
     cursor.execute('''
-        SELECT name, age, health_conditions, daily_goal
+        SELECT name, age, health_conditions, water_goal
         FROM users WHERE id = ?
-    ''', (user_id,))
-    user_row = cursor.fetchone()
+    ''', (id_user,))
+    userrow = cursor.fetchone()
     
    
     cursor.execute('''
-        SELECT today_intake, streak, total_sips, weekly_data, last_date, history
-        FROM water_data WHERE user_id = ?
-    ''', (user_id,))
-    water_row = cursor.fetchone()
+        SELECT water_intake, streak, whole_sips, weekly_hist, yesterday, data
+        FROM water_data WHERE id_user = ?
+    ''', (id_user,))
+    waterrow = cursor.fetchone()
     
     
     cursor.execute('''
-        SELECT notifications, reminder_interval
-        FROM settings WHERE user_id = ?
-    ''', (user_id,))
-    settings_row = cursor.fetchone()
+        SELECT notification, reminder_interval_user
+        FROM settings WHERE id_user = ?
+    ''', (id_user,))
+    settingsrow = cursor.fetchone()
     
     conn.close()
     
-    if user_row and water_row and settings_row:
+    if userrow and waterrow and settingsrow:
         return {
             'user_data': {
-                'name': user_row[0],
-                'age': str(user_row[1]),
-                'health_conditions': json.loads(user_row[2]),
-                'daily_goal': user_row[3]
+                'name': userrow[0],
+                'age': str(userrow[1]),
+                'health_conditions': json.loads(userrow[2]),
+                'water_goal': userrow[3]
             },
             'water_data': {
-                'today_intake': water_row[0],
-                'streak': water_row[1],
-                'total_sips': water_row[2],
-                'weekly_data': json.loads(water_row[3]),
-                'last_date': water_row[4],
-                'history': json.loads(water_row[5])
+                'water_intake': waterrow[0],
+                'streak': waterrow[1],
+                'whole_sips': waterrow[2],
+                'weekly_hist': json.loads(waterrow[3]),
+                'yesterday': waterrow[4],
+                'data': json.loads(waterrow[5])
             },
             'settings': {
-                'notifications': bool(settings_row[0]),
-                'reminder_interval': settings_row[1]
+                'notification': bool(settingsrow[0]),
+                'reminder_interval_user': settingsrow[1]
             }
         }
     return None
 
-def update_water_data(user_id, water_data):
+def update_water_intake(id_user, water_data):
     """Update water data for user"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
     cursor.execute('''
         UPDATE water_data
-        SET today_intake = ?, streak = ?, total_sips = ?, 
-            weekly_data = ?, last_date = ?, history = ?
-        WHERE user_id = ?
+        SET water_intake = ?, streak = ?, whole_sips = ?, 
+            weekly_hist = ?, yesterday = ?, data = ?
+        WHERE id_user = ?
     ''', (
-        water_data['today_intake'],
+        water_data['water_intake'],
         water_data['streak'],
-        water_data['total_sips'],
-        json.dumps(water_data['weekly_data']),
-        water_data['last_date'],
-        json.dumps(water_data['history']),
-        user_id
+        water_data['whole_sips'],
+        json.dumps(water_data['weekly_hist']),
+        water_data['yesterday'],
+        json.dumps(water_data['data']),
+        id_user
     ))
     
     conn.commit()
     conn.close()
 
-def update_user_profile(user_id, name, age, daily_goal):
+def update_water_settings(id_user, name, age, water_goal):
     """Update user profile"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
     cursor.execute('''
         UPDATE users
-        SET name = ?, age = ?, daily_goal = ?
+        SET name = ?, age = ?, water_goal = ?
         WHERE id = ?
-    ''', (name, age, daily_goal, user_id))
+    ''', (name, age, water_goal, id_user))
     
     conn.commit()
     conn.close()
 
-def update_settings(user_id, settings):
+def update_remainder(id_user, settings):
     """Update user settings"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
     cursor.execute('''
         UPDATE settings
-        SET notifications = ?, reminder_interval = ?
-        WHERE user_id = ?
-    ''', (int(settings['notifications']), settings['reminder_interval'], user_id))
+        SET notification = ?, reminder_interval_user = ?
+        WHERE id_user = ?
+    ''', (int(settings['notification']), settings['reminder_interval_user'], id_user))
     
     conn.commit()
     conn.close()
 
-def get_all_usernames():
-    """Get list of all usernames (for user selection)"""
+def get_all_user_name():
+    """Get list of all user_name (for user selection)"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
     cursor.execute('SELECT username FROM users ORDER BY username')
-    usernames = [row[0] for row in cursor.fetchall()]
+    user_name = [row[0] for row in cursor.fetchall()]
     
     conn.close()
-    return usernames
-def reset_today_intake(user_id):
+    return user_name
+def reset_water_intake(id_user):
     """Reset only today's water intake for a given user"""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     cursor.execute('''
         UPDATE water_data
-        SET today_intake = 0
-        WHERE user_id = ?
-    ''', (user_id,))
+        SET water_intake = 0
+        WHERE id_user = ?
+    ''', (id_user,))
 
     conn.commit()
     conn.close()
 
-init_database()
+database()
+
 
