@@ -1,15 +1,15 @@
 import streamlit as st
 
-from login import show_login
-from onboarding import show_onboarding
-from dashboard import show_dashboard
-from water_log import show_water_log
-from progress import show_progress
-from games import show_games
-from settings import show_settings
+from login import login
+from onboarding import onboarding
+from dashboard import dashboard
+from water_log import water_log
+from progress import progress
+from games import games
+from settings import settings
 
-from database import init_database, get_user_data, update_water_data
-from helpers import check_and_reset_daily
+from database import database, get_userdata, update_water_intake
+from helpers import reset_daily
 
 st.set_page_config(
     page_title="HydroLife",
@@ -93,8 +93,8 @@ def init_session_state():
     if 'logged_in' not in st.session_state:
         st.session_state.logged_in = False
     
-    if 'user_id' not in st.session_state:
-        st.session_state.user_id = None
+    if 'id_user' not in st.session_state:
+        st.session_state.id_user = None
     
     if 'username' not in st.session_state:
         st.session_state.username = None
@@ -102,8 +102,8 @@ def init_session_state():
     if 'current_page' not in st.session_state:
         st.session_state.current_page = 'dashboard'
     
-    if 'show_onboarding' not in st.session_state:
-        st.session_state.show_onboarding = False
+    if 'onboarding' not in st.session_state:
+        st.session_state.onboarding = False
     
     if 'signup_username' not in st.session_state:
         st.session_state.signup_username = None
@@ -111,13 +111,13 @@ def init_session_state():
     if 'signup_password' not in st.session_state:
         st.session_state.signup_password = None
    
-    if st.session_state.logged_in and st.session_state.user_id:
+    if st.session_state.logged_in and st.session_state.id_user:
         if 'user_data' not in st.session_state:
-            data = get_user_data(st.session_state.user_id)
+            data = get_userdata(st.session_state.id_user)
             if data:
                 
-                data['water_data'] = check_and_reset_daily(data['water_data'])
-                update_water_data(st.session_state.user_id, data['water_data'])
+                data['water_data'] = reset_daily(data['water_data'])
+                update_water_intake(st.session_state.id_user, data['water_data'])
                 
                 st.session_state.user_data = data['user_data']
                 st.session_state.water_data = data['water_data']
@@ -159,28 +159,28 @@ def main():
     """Main application entry point"""
     load_css()
     init_session_state()
-    init_database()
+    database()
     
     
-    if st.session_state.show_onboarding:
-        show_onboarding()
+    if st.session_state.onboarding:
+        onboarding()
         return
     
     
     if not st.session_state.logged_in:
-        show_login()
+        login()
         return
     
     if st.session_state.current_page == 'dashboard':
-        show_dashboard()
+        dashboard()
     elif st.session_state.current_page == 'log':
-        show_water_log()
+        water_log()
     elif st.session_state.current_page == 'progress':
-        show_progress()
+        progress()
     elif st.session_state.current_page == 'games':
-        show_games()
+        games()
     elif st.session_state.current_page == 'settings':
-        show_settings()
+        settings()
     
     show_navigation()
 
