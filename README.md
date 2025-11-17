@@ -30,6 +30,7 @@ Features:
 Today's Water Intake (ml consumed vs. goal)
 Quick-add buttons: 250ml, 500ml, 750ml
 Dynamic Avatar Display (changes based on progress: 🌑→🌒→🌓→🌔→🌕)
+End Animation when goal is reached
 
 
 Real‑time progress bar
