@@ -1,12 +1,17 @@
 Hydrolife- Water tracking app
+
 A wellness-focused application empowering users to monitor, achieve, and maintain optimal daily water intake through personalized goals, dynamic progress tracking, and gamified engagement.
 
 🚀 Project Overview
+
 In today's fast-paced world, users—especially students and professionals—often neglect proper hydration, leading to fatigue, poor concentration, and long-term health issues. Water Buddy offers a supportive, non-judgmental space to set personalized hydration goals, visualize daily progress, earn rewards through consistent habits, and celebrate achievement milestones with dynamic avatar progression.
 
 📌 Scenario
+
 Course: Artificial Intelligence-- Year 1
+
 Assessment: Formative Assessment-02 (FA-02)
+
 Water Buddy - Hydration Tracking App
 
 🧠 Problem Statement
