@@ -15,6 +15,7 @@ Many users struggle to maintain consistent water intake throughout the day, resu
 🎯 Core Features
 
 1. Login & Onboarding
+   
 Purpose: Secure entry point and personalized setup.
 Features:
 Username & Password fields (simple login to avoid complication)
@@ -24,7 +25,7 @@ Name Entry
 Age Selection
 Health Conditions (Athletic, Pregnant, Diabetes, Kidney Issues, etc.)
 Reminder Frequency Preferences
-2. Dashboard (Home)
+3. Dashboard (Home)
 Purpose: Main hub for daily water tracking and quick access.
 Features:
 Today's Water Intake (ml consumed vs. goal)
