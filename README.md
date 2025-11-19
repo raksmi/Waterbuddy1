@@ -18,7 +18,9 @@ Many users struggle to maintain consistent water intake throughout the day, resu
    
 Purpose: Secure entry point and personalized setup.
 Features:
+
 Username & Password fields (simple login to avoid complication)
+
 5-Step Onboarding Flow:
 Welcome Screen
 Name Entry
