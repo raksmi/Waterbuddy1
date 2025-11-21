@@ -289,3 +289,13 @@ Games: Play Snake or take Water Quiz for motivation
 Settings: Manage profile and preferences
 
 Notifications: Receive timely hydration reminders
+
+Credits
+
+Created by: M.Raksmi Priyasree (ID: 1000405)
+
+Class: Artificial Intelligence: Python programming – Year 1
+
+Mentor: Syed Ali Beema.S
+
+School: Jain Vidyalaya IB world school, Madurai
