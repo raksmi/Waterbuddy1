@@ -299,3 +299,5 @@ Class: Artificial Intelligence: Python programming – Year 1
 Mentor: Syed Ali Beema.S
 
 School: Jain Vidyalaya IB world school, Madurai
+
+NOTE: App's data will expiry, if it isnt opened for days together
