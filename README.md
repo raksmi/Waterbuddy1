@@ -300,4 +300,4 @@ Mentor: Syed Ali Beema.S
 
 School: Jain Vidyalaya IB world school, Madurai
 
-NOTE: App's data will expiry, if it isnt opened for days together
+NOTE: App's data will expiry, if it isnt opened for days together (Due to streamlit's configuration)
